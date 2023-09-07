@@ -1,58 +1,76 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.Random;
 
 public class IsingModelVisualizer extends JFrame {
-    private JPanel[][] grid;
+    private static final long serialVersionUID = 1L;
+	private static final int GRID_SIZE = 150; // Change this to your desired grid size
+    private static final double BLUE_THRESHOLD = 0.5; // Adjust this threshold as needed
 
-    public IsingModelVisualizer(int n) {
-        setTitle("Pixel Grid");
+    private JPanel[][] gridPanels;
+    private Random random;
+    private int xcoord, ycoord;
+
+    public IsingModelVisualizer() {
+        random = new Random();
+        gridPanels = new JPanel[GRID_SIZE][GRID_SIZE];
+        initializeGUI();
+        startPixelUpdate();
+    }
+
+    private void initializeGUI() {
+        setTitle("Ising Model Visualizer");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(n, n));
-        
-        grid = new JPanel[n][n];
+        setLayout(new GridLayout(GRID_SIZE, GRID_SIZE));
 
-        // Initialize the grid with default color (e.g., white)
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                grid[i][j] = new JPanel();
-                grid[i][j].setPreferredSize(new Dimension(5, 5));
-                grid[i][j].setBackground(Color.RED);
-//                grid[i][j].setBorder(BorderFactory.createLineBorder(Color.WHITE)); // Add borders for better visualization
-                grid[i][j].addMouseListener(new PixelClickListener(i, j)); // Add mouse listener to update color
-                add(grid[i][j]);
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                gridPanels[i][j] = new JPanel();
+                if(j<75) {
+                	gridPanels[i][j].setBackground(Color.BLUE); // Initial color is blue
+            	}
+                else {
+                	gridPanels[i][j].setBackground(Color.RED); // Initial color is red
+                }
+                add(gridPanels[i][j]);
             }
         }
-        grid[10][10].setBackground(Color.BLUE);
 
         pack();
         setLocationRelativeTo(null);
+        setVisible(true);
     }
 
-    private class PixelClickListener extends MouseAdapter {
-        private int row, col;
+    private void startPixelUpdate() {
+        Timer timer = new Timer(1000, e -> updatePixels());
+        timer.start();
+    }
 
-        public PixelClickListener(int row, int col) {
-            this.row = row;
-            this.col = col;
+    private void updatePixels() {
+//        for (int i = 0; i < GRID_SIZE; i++) {
+//            for (int j = 0; j < GRID_SIZE; j++) {
+//                if (random.nextDouble() < BLUE_THRESHOLD) {
+//                    gridPanels[i][j].setBackground(Color.BLUE);
+//                } else {
+//                    gridPanels[i][j].setBackground(Color.RED);
+//                }
+//            }
+//        }
+        xcoord = random.nextInt(150);
+        ycoord = random.nextInt(150);
+        if (random.nextDouble() < BLUE_THRESHOLD) {
+            gridPanels[xcoord][ycoord].setBackground(Color.BLUE);
+        } else {
+            gridPanels[xcoord][ycoord].setBackground(Color.RED);
         }
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            // Handle mouse click event to update the color of the clicked pixel
-            Color newColor = JColorChooser.showDialog(null, "Choose Color", grid[row][col].getBackground());
-            if (newColor != null) {
-                grid[row][col].setBackground(newColor);
-            }
-        }
+        
+    }
+    
+    private void isingCalculation() {
+    	
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            int n = 150; // Change this to your desired grid size (n by n)
-            IsingModelVisualizer pixelGrid = new IsingModelVisualizer(n);
-            pixelGrid.setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new IsingModelVisualizer());
     }
 }
