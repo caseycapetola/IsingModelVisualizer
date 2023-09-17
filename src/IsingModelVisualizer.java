@@ -42,21 +42,39 @@ public class IsingModelVisualizer extends JFrame {
 //                add(gridPanels[i][j]);
 //            }
 //        }
+//        for (int i = 0; i < GRID_SIZE; i++) {
+//            for (int j = 0; j < GRID_SIZE; j++) {
+//                gridPanels[i][j] = new JPanel();
+//                gridPanels[i][j].setPreferredSize(new Dimension(2,2));
+//                if(j%2==0 || i%2==0) {
+//                	gridPanels[i][j].setBackground(Color.BLUE); // Initial color is blue
+//                	grid[i][j] = NEG;
+//            	}
+//                else {
+//                	gridPanels[i][j].setBackground(Color.RED); // Initial color is red
+//                	grid[i][j] = POS;
+//                }
+//                add(gridPanels[i][j]);
+//            }
+//        }
+        
+        
         for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
-                gridPanels[i][j] = new JPanel();
-                gridPanels[i][j].setPreferredSize(new Dimension(2,2));
-                if(j%2==0 || i%2==0) {
-                	gridPanels[i][j].setBackground(Color.BLUE); // Initial color is blue
-                	grid[i][j] = NEG;
-            	}
-                else {
-                	gridPanels[i][j].setBackground(Color.RED); // Initial color is red
-                	grid[i][j] = POS;
-                }
-                add(gridPanels[i][j]);
-            }
-        }
+          for (int j = 0; j < GRID_SIZE; j++) {
+              gridPanels[i][j] = new JPanel();
+              gridPanels[i][j].setPreferredSize(new Dimension(2,2));
+              double rand = random.nextFloat();
+              if(rand < BLUE_THRESHOLD) {
+              	gridPanels[i][j].setBackground(Color.BLUE); // Initial color is blue
+              	grid[i][j] = NEG;
+          	}
+              else {
+              	gridPanels[i][j].setBackground(Color.RED); // Initial color is red
+              	grid[i][j] = POS;
+              }
+              add(gridPanels[i][j]);
+          }
+      }
 
         pack();
         setLocationRelativeTo(null);
